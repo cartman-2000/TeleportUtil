@@ -16,17 +16,38 @@ namespace TeleportUtil
 
         public void Execute(RocketPlayer caller, string[] command)
         {
-            if (caller == null)
+            if ((caller == null && command.Length < 1) || command.Length > 1)
             {
-                RocketChat.Say(caller, "Can't locate player.");
+                RocketChat.Say(caller, TeleportUtil.Instance.Translate("can't_locate_player", new object[] {}));
                 return;
             }
-            RocketChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map", new object[] { Math.Round(caller.Position.x, 2), Math.Round(caller.Position.y, 2), Math.Round(caller.Position.z, 2)}));
+            if (command.Length == 1)
+            {
+                if (!caller.HasPermission("locate.other"))
+                {
+                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("locate_other_not_allowed", new object[] { }));
+                    return;
+                }
+                RocketPlayer target = RocketPlayer.FromName(command[0]);
+                if (target == null)
+                {
+                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("can't_locate_player", new object[] { }));
+                    return;
+                }
+                else
+                {
+                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map_other", new object[] { target.CharacterName.Truncate(14), Math.Round(target.Position.x, 2), Math.Round(target.Position.y, 2), Math.Round(target.Position.z, 2) }));
+                }
+            }
+            else
+            {
+                RocketChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map", new object[] { Math.Round(caller.Position.x, 2), Math.Round(caller.Position.y, 2), Math.Round(caller.Position.z, 2) }));
+            }
         }
 
         public string Help
         {
-            get { return "Prints out the location of the player on the map for usage in the /tp command."; }
+            get { return "Prints out the location of a player on the map for usage in the /tp command."; }
         }
 
         public string Name
@@ -36,12 +57,12 @@ namespace TeleportUtil
 
         public bool RunFromConsole
         {
-            get { return false; }
+            get { return true; }
         }
 
         public string Syntax
         {
-            get { return ""; }
+            get { return "[\"name\"]"; }
         }
     }
 }
