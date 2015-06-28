@@ -7,7 +7,7 @@ using Rocket.Unturned;
 
 namespace TeleportUtil
 {
-    class CommandLocate : IRocketCommand
+    public class CommandLocate : IRocketCommand
     {
         public List<string> Aliases
         {

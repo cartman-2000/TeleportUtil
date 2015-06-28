@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TeleportUtil
 {
-    public class TeleportUtil : RocketPlugin
+    public class TeleportUtil : RocketPlugin<TeleportUtilConfig>
     {
         public static TeleportUtil Instance;
 
@@ -20,6 +20,10 @@ namespace TeleportUtil
                 return new Dictionary<string, string>
                 {
                     {
+                        "invalid_arg",
+                        "Invalid Arguments."
+                    },
+                    {
                         "can't_locate_player",
                         "Can't locate player."
                     },
@@ -34,6 +38,18 @@ namespace TeleportUtil
                     {
                         "location_on_map_other",
                         "Player: \"{0}\" location on the map is: x:{1}, y:{2}, z:{3}"
+                    },
+                    {
+                        "tprel_help",
+                        "<x> <y> <z> - Teleport to x,y,z coords relative to yourself."
+                    },
+                    {
+                        "tprel_fail",
+                        "Failed to teleport: Can't teleport while in a car."
+                    },
+                    {
+                        "tprel_sucsess",
+                        "You have been teleported to: x:{0}, y:{1}, z:{2}"
                     }
                 };
             }
