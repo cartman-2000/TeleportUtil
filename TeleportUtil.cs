@@ -44,12 +44,16 @@ namespace TeleportUtil
                         "<x> <y> <z> - Teleport to x,y,z coords relative to yourself."
                     },
                     {
-                        "tprel_fail",
+                        "tp_fail",
                         "Failed to teleport: Can't teleport while in a car."
                     },
                     {
-                        "tprel_sucsess",
+                        "tp_success",
                         "You have been teleported to: x:{0}, y:{1}, z:{2}"
+                    },
+                    {
+                        "tpto_help",
+                        "[<u|d|n|s|w|e>distance] [...] [...] - Teleport by direction:distance."
                     }
                 };
             }

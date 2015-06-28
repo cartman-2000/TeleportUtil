@@ -38,12 +38,12 @@ namespace TeleportUtil
                 {
                     if (caller.Stance == EPlayerStance.DRIVING)
                     {
-                        RocketChat.Say(caller, TeleportUtil.Instance.Translate("tprel_fail", new object[] { }));
+                        RocketChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail", new object[] { }));
                         return;
                     }
                     Vector3 newLocation = new Vector3(caller.Position.x + x.Value, caller.Position.y + y.Value, caller.Position.z + z.Value);
                     caller.Teleport(newLocation, caller.Rotation);
-                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("tprel_sucsess", new object[] { Math.Round(newLocation.x, 2), Math.Round(newLocation.y, 2), Math.Round(newLocation.z, 2) }));
+                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", new object[] { Math.Round(newLocation.x, 2), Math.Round(newLocation.y, 2), Math.Round(newLocation.z, 2) }));
                 }
                 else
                 {
