@@ -1,31 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rocket.Unturned;
+using Rocket.API;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
 using Rocket.Unturned.Player;
 using UnityEngine;
 using SDG.Unturned;
 
-
 namespace TeleportUtil
 {
     public class CommandTprel : IRocketCommand
     {
-        public System.Collections.Generic.List<string> Aliases
+        public bool AllowFromConsole
+        {
+            get { return false; }
+        }
+
+        public string Name
+        {
+            get { return "tprel"; }
+        }
+
+        public string Help
+        {
+            get { return "Teleport to x,y,z coords relative to yourself."; }
+        }
+
+        public string Syntax
+        {
+            get { return "<x> <y> <z>"; }
+        }
+
+        public List<string> Aliases
         {
             get { return new List<string>(); }
         }
 
-        public void Execute(RocketPlayer caller, string[] command)
+        public List<string> Permissions
         {
+            get { return new List<string>() { "TeleportUtil.tprel" }; }
+        }
+
+        public void Execute(IRocketPlayer caller, string[] command)
+        {
+            UnturnedPlayer unturnedCaller = UnturnedPlayer.FromName(caller.Id);
             if (command.Length == 0)
             {
-                RocketChat.Say(caller, TeleportUtil.Instance.Translate("tprel_help", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tprel_help", new object[] { }));
                 return;
             }
             if (command.Length != 3)
             {
-                RocketChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
                 return;
             }
             else
@@ -36,41 +62,21 @@ namespace TeleportUtil
 
                 if (x.HasValue && y.HasValue && z.HasValue)
                 {
-                    if (caller.Stance == EPlayerStance.DRIVING)
+                    if (unturnedCaller.Stance == EPlayerStance.DRIVING || unturnedCaller.Stance == EPlayerStance.SITTING)
                     {
-                        RocketChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail", new object[] { }));
+                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail", new object[] { }));
                         return;
                     }
-                    Vector3 newLocation = new Vector3(caller.Position.x + x.Value, caller.Position.y + y.Value, caller.Position.z + z.Value);
-                    caller.Teleport(newLocation, caller.Rotation);
-                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", new object[] { Math.Round(newLocation.x, 2), Math.Round(newLocation.y, 2), Math.Round(newLocation.z, 2) }));
+                    Vector3 newLocation = new Vector3(unturnedCaller.Position.x + x.Value, unturnedCaller.Position.y + y.Value, unturnedCaller.Position.z + z.Value);
+                    unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", new object[] { Math.Round(newLocation.x, 2), Math.Round(newLocation.y, 2), Math.Round(newLocation.z, 2) }));
                 }
                 else
                 {
-                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
                     return;
                 }
             }
-        }
-
-        public string Help
-        {
-            get { return "Teleport to x,y,z coords relative to yourself."; }
-        }
-
-        public string Name
-        {
-            get { return "tprel"; }
-        }
-
-        public bool RunFromConsole
-        {
-            get { return false; }
-        }
-
-        public string Syntax
-        {
-            get { return "<x> <y> <z>"; }
         }
     }
 }

@@ -8,15 +8,5 @@ namespace TeleportUtil
 {
     public class TeleportUtilConfig : IRocketPluginConfiguration
     {
-        public IRocketPluginConfiguration DefaultConfiguration
-        {
-            get
-            { 
-                return new TeleportUtilConfig()
-                {
-
-                };
-            }
-        }
     }
 }

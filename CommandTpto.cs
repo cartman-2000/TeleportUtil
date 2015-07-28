@@ -1,49 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rocket.Unturned.Commands;
-using Rocket.Unturned.Player;
-using Rocket.Unturned;
 using UnityEngine;
 using SDG.Unturned;
+using Rocket.API;
+using Rocket.Unturned.Chat;
+using Rocket.Unturned.Player;
 
 namespace TeleportUtil
 {
     public class CommandTpto : IRocketCommand
     {
+        public bool AllowFromConsole
+        {
+            get { return false; }
+        }
+        
+        public string Name
+        {
+            get { return "tpto"; }
+        }
+
+        public string Help
+        {
+            get { return "Teleport by direction:distance."; }
+        }
+
+        public string Syntax
+        {
+            get { return "[<u|d|n|s|w|e>distance] [...] [...]"; }
+        }
+
         public List<string> Aliases
         {
             get { return new List<string>(); }
         }
 
-        public void Execute(RocketPlayer caller, string[] command)
+        public List<string> Permissions
         {
+            get { return new List<string>() { "TeleportUtil.tpto" }; }
+        }
+
+        public void Execute(IRocketPlayer caller, string[] command)
+        {
+            UnturnedPlayer unturnedCaller = UnturnedPlayer.FromName(caller.Id);
             if (command.Length == 0)
             {
-                RocketChat.Say(caller, TeleportUtil.Instance.Translate("tpto_help", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tpto_help", new object[] { }));
                 return;
             }
             if (command.Length > 3)
             {
-                RocketChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
                 return;
             }
-            if (caller.Stance == EPlayerStance.DRIVING)
+            if (unturnedCaller.Stance == EPlayerStance.DRIVING || unturnedCaller.Stance == EPlayerStance.SITTING)
             {
-                RocketChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail", new object[] { }));
                 return;
             }
-            Vector3 newLocation = caller.Position;
+            Vector3 newLocation = unturnedCaller.Position;
             foreach (string part in command)
             {
                 if (part.Length < 2)
                 {
-                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
                     return;
                 }
                 float distance;
                 if (!float.TryParse(part.Substring(1, part.Length - 1), out distance))
                 {
-                    RocketChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
                     return;
                 }
                 switch (part.Substring(0, 1).ToLower())
@@ -67,32 +93,12 @@ namespace TeleportUtil
                         newLocation.x -= distance;
                         break;
                     default:
-                        RocketChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
                         return;
                 }
             }
-            caller.Teleport(newLocation, caller.Rotation);
-            RocketChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", new object[] { Math.Round(newLocation.x, 2), Math.Round(newLocation.y, 2), Math.Round(newLocation.z, 2) }));
-        }
-
-        public string Help
-        {
-            get { return "Teleport by direction:distance."; }
-        }
-
-        public string Name
-        {
-            get { return "tpto"; }
-        }
-
-        public bool RunFromConsole
-        {
-            get { return false; }
-        }
-
-        public string Syntax
-        {
-            get { return "[<u|d|n|s|w|e>distance] [...] [...]"; }
+            unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
+            UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", new object[] { Math.Round(newLocation.x, 2), Math.Round(newLocation.y, 2), Math.Round(newLocation.z, 2) }));
         }
     }
 }
