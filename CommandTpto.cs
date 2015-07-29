@@ -42,7 +42,6 @@ namespace TeleportUtil
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            UnturnedPlayer unturnedCaller = UnturnedPlayer.FromName(caller.Id);
             if (command.Length == 0)
             {
                 UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tpto_help", new object[] { }));
@@ -53,11 +52,16 @@ namespace TeleportUtil
                 UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
                 return;
             }
+
+            // Don't allow teleport if the player is in a car.
+            UnturnedPlayer unturnedCaller = (UnturnedPlayer)caller;
             if (unturnedCaller.Stance == EPlayerStance.DRIVING || unturnedCaller.Stance == EPlayerStance.SITTING)
             {
                 UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail", new object[] { }));
                 return;
             }
+
+            // Parse through the list of parameters, and compute new location.
             Vector3 newLocation = unturnedCaller.Position;
             foreach (string part in command)
             {

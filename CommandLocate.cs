@@ -41,22 +41,19 @@ namespace TeleportUtil
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            if ((caller is ConsolePlayer && command.Length < 1) || command.Length > 1)
+            // Get playername, if one was set in the command. Don't allow the command to be ran on self from the console.
+            UnturnedPlayer target = command.GetUnturnedPlayerParameter(0);
+            if ((caller is ConsolePlayer && command.Length < 1) || command.Length > 1 || (target == null && command.Length == 1 && caller.HasPermission("locate.other")))
             {
                 UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("can't_locate_player"));
                 return;
             }
             if (command.Length == 1)
             {
+                // Only allow the player to locate another player if they have the right permission.
                 if (!caller.HasPermission("locate.other"))
                 {
                     UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("locate_other_not_allowed"));
-                    return;
-                }
-                UnturnedPlayer target = command.GetUnturnedPlayerParameter(0);
-                if (target == null)
-                {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("can't_locate_player"));
                     return;
                 }
                 else
@@ -66,7 +63,7 @@ namespace TeleportUtil
             }
             else
             {
-                UnturnedPlayer unturnedCaller = UnturnedPlayer.FromName(caller.Id);
+                UnturnedPlayer unturnedCaller = (UnturnedPlayer)caller;
                 UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map", Math.Round(unturnedCaller.Position.x, 2), Math.Round(unturnedCaller.Position.y, 2), Math.Round(unturnedCaller.Position.z, 2)));
             }
         }
