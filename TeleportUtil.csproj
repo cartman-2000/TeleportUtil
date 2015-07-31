@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandTpto.cs" />
-    <Compile Include="TeleportUtilConfig.cs" />
     <Compile Include="CommandTprel.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="CommandLocate.cs" />

@@ -3,7 +3,7 @@ using Rocket.Core.Plugins;
 
 namespace TeleportUtil
 {
-    public class TeleportUtil : RocketPlugin<TeleportUtilConfig>
+    public class TeleportUtil : RocketPlugin
     {
         public static TeleportUtil Instance;
 
