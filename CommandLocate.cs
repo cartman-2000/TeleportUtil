@@ -43,7 +43,12 @@ namespace TeleportUtil
         {
             // Get playername, if one was set in the command. Don't allow the command to be ran on self from the console.
             UnturnedPlayer target = command.GetUnturnedPlayerParameter(0);
-            if ((caller is ConsolePlayer && command.Length < 1) || command.Length > 1 || (target == null && command.Length == 1 && caller.HasPermission("locate.other")))
+            UnturnedPlayer untrunedCaller = null;
+            if (!(caller is ConsolePlayer))
+            {
+                untrunedCaller = (UnturnedPlayer)caller;
+            }
+            if ((caller is ConsolePlayer && command.Length < 1) || command.Length > 1 || (target == null && command.Length == 1 && (caller.HasPermission("locate.other") || untrunedCaller.IsAdmin || caller is ConsolePlayer)))
             {
                 UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("can't_locate_player"));
                 return;
@@ -51,14 +56,14 @@ namespace TeleportUtil
             if (command.Length == 1)
             {
                 // Only allow the player to locate another player if they have the right permission.
-                if (!caller.HasPermission("locate.other"))
+                if (caller.HasPermission("locate.other") || untrunedCaller.IsAdmin || caller is ConsolePlayer)
                 {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("locate_other_not_allowed"));
-                    return;
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map_other", target.CharacterName.Truncate(14), Math.Round(target.Position.x, 2), Math.Round(target.Position.y, 2), Math.Round(target.Position.z, 2)));
                 }
                 else
                 {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map_other", target.CharacterName.Truncate(14), Math.Round(target.Position.x, 2), Math.Round(target.Position.y, 2), Math.Round(target.Position.z, 2)));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("locate_other_not_allowed"));
+                    return;
                 }
             }
             else
