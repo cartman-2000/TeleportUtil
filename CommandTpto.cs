@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using SDG.Unturned;
 using Rocket.API;
@@ -10,6 +9,8 @@ namespace TeleportUtil
 {
     public class CommandTpto : IRocketCommand
     {
+        public static string help = "Teleport by direction:distance.";
+        public static string syntax = "[<u|d|n|s|w|e>distance] [...] [...]";
         public bool AllowFromConsole
         {
             get { return false; }
@@ -22,7 +23,7 @@ namespace TeleportUtil
 
         public string Help
         {
-            get { return "Teleport by direction:distance."; }
+            get { return help; }
         }
 
         public string Syntax
@@ -44,12 +45,12 @@ namespace TeleportUtil
         {
             if (command.Length == 0)
             {
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tpto_help", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tpto_help"));
                 return;
             }
             if (command.Length > 3)
             {
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                 return;
             }
 
@@ -57,7 +58,7 @@ namespace TeleportUtil
             UnturnedPlayer unturnedCaller = (UnturnedPlayer)caller;
             if (unturnedCaller.Stance == EPlayerStance.DRIVING || unturnedCaller.Stance == EPlayerStance.SITTING)
             {
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail"));
                 return;
             }
 
@@ -67,13 +68,13 @@ namespace TeleportUtil
             {
                 if (part.Length < 2)
                 {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                     return;
                 }
                 float distance;
                 if (!float.TryParse(part.Substring(1, part.Length - 1), out distance))
                 {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                     return;
                 }
                 switch (part.Substring(0, 1).ToLower())
@@ -97,12 +98,12 @@ namespace TeleportUtil
                         newLocation.x -= distance;
                         break;
                     default:
-                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                         return;
                 }
             }
             unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
-            UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", new object[] { Math.Round(newLocation.x, 2), Math.Round(newLocation.y, 2), Math.Round(newLocation.z, 2) }));
+            UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
         }
     }
 }

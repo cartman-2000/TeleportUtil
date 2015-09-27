@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
@@ -11,6 +10,8 @@ namespace TeleportUtil
 {
     public class CommandTprel : IRocketCommand
     {
+        public static string help = "Teleport to x,y,z coords relative to yourself.";
+        public static string syntax = "<x> <y> <z>";
         public bool AllowFromConsole
         {
             get { return false; }
@@ -23,12 +24,12 @@ namespace TeleportUtil
 
         public string Help
         {
-            get { return "Teleport to x,y,z coords relative to yourself."; }
+            get { return help; }
         }
 
         public string Syntax
         {
-            get { return "<x> <y> <z>"; }
+            get { return syntax; }
         }
 
         public List<string> Aliases
@@ -45,14 +46,14 @@ namespace TeleportUtil
         {
             if (command.Length == 0)
             {
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tprel_help", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tprel_help"));
                 return;
             }
 
             // Only allow the command to be ran with all three parameters.
             if (command.Length != 3)
             {
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                 return;
             }
             else
@@ -67,18 +68,18 @@ namespace TeleportUtil
                     // Don't allow the player to teleport if they are in a car.
                     if (unturnedCaller.Stance == EPlayerStance.DRIVING || unturnedCaller.Stance == EPlayerStance.SITTING)
                     {
-                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail", new object[] { }));
+                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail"));
                         return;
                     }
 
                     // Compute new location from the relative location parameters entered into the command.
                     Vector3 newLocation = new Vector3(unturnedCaller.Position.x + x.Value, unturnedCaller.Position.y + y.Value, unturnedCaller.Position.z + z.Value);
                     unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", new object[] { Math.Round(newLocation.x, 2), Math.Round(newLocation.y, 2), Math.Round(newLocation.z, 2) }));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
                 }
                 else
                 {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg", new object[] { }));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                     return;
                 }
             }

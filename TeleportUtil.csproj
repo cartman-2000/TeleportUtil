@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandTpall.cs" />
     <Compile Include="CommandTpto.cs" />
     <Compile Include="CommandTprel.cs" />
     <Compile Include="Extensions.cs" />

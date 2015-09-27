@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
@@ -58,7 +57,7 @@ namespace TeleportUtil
                 // Only allow the player to locate another player if they have the right permission.
                 if (caller.HasPermission("locate.other") || untrunedCaller.IsAdmin || caller is ConsolePlayer)
                 {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map_other", target.CharacterName.Truncate(14), Math.Round(target.Position.x, 2), Math.Round(target.Position.y, 2), Math.Round(target.Position.z, 2)));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map_other", target.CharacterName.Truncate(14), target.Position.xyz_Location()));
                 }
                 else
                 {
@@ -69,7 +68,7 @@ namespace TeleportUtil
             else
             {
                 UnturnedPlayer unturnedCaller = (UnturnedPlayer)caller;
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map", Math.Round(unturnedCaller.Position.x, 2), Math.Round(unturnedCaller.Position.y, 2), Math.Round(unturnedCaller.Position.z, 2)));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map", unturnedCaller.Position.xyz_Location()));
             }
         }
     }
