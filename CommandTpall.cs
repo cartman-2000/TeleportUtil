@@ -94,7 +94,7 @@ namespace TeleportUtil
 
         private void Teleport(Vector3 Location, float Rotation, IRocketPlayer caller, string name = null)
         {
-            int numPlayers = Steam.Players.Count;
+            int numPlayers = Provider.Players.Count;
             List<string> excluded = new List<string>();
             if (numPlayers == 0)
             {
@@ -103,7 +103,7 @@ namespace TeleportUtil
             }
             if (name == null)
                 name = Location.xyz_Location();
-            foreach (SteamPlayer player in Steam.Players)
+            foreach (SteamPlayer player in Provider.Players)
             {
                 // Don't teleport the player to teleport if they are in a car.
                 if (player.Player.Stance.Stance == EPlayerStance.DRIVING || player.Player.Stance.Stance == EPlayerStance.SITTING)
