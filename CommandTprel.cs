@@ -12,9 +12,9 @@ namespace TeleportUtil
     {
         public static string help = "Teleport to x,y,z coords relative to yourself.";
         public static string syntax = "<x> <y> <z>";
-        public bool AllowFromConsole
+        public AllowedCaller AllowedCaller
         {
-            get { return false; }
+            get { return AllowedCaller.Player; }
         }
 
         public string Name

@@ -11,11 +11,11 @@ namespace TeleportUtil
     {
         public static string help = "Teleport by direction:distance.";
         public static string syntax = "[<u|d|n|s|w|e>distance] [...] [...]";
-        public bool AllowFromConsole
+        public AllowedCaller AllowedCaller
         {
-            get { return false; }
+            get { return AllowedCaller.Player; }
         }
-        
+
         public string Name
         {
             get { return "tpto"; }
