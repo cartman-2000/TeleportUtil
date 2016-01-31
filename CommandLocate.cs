@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Rocket.API;
-using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
 using Rocket.Unturned.Player;
 
@@ -49,7 +48,7 @@ namespace TeleportUtil
             }
             if ((caller is ConsolePlayer && command.Length < 1) || command.Length > 1 || (target == null && command.Length == 1 && (caller.HasPermission("locate.other") || untrunedCaller.IsAdmin || caller is ConsolePlayer)))
             {
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("can't_locate_player"));
+                TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("can't_locate_player"));
                 return;
             }
             if (command.Length == 1)
@@ -57,18 +56,18 @@ namespace TeleportUtil
                 // Only allow the player to locate another player if they have the right permission.
                 if (caller.HasPermission("locate.other") || untrunedCaller.IsAdmin || caller is ConsolePlayer)
                 {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map_other", target.CharacterName.Truncate(14), target.Position.xyz_Location()));
+                    TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("location_on_map_other", target.CharacterName.Truncate(14), target.Position.xyz_Location()));
                 }
                 else
                 {
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("locate_other_not_allowed"));
+                    TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("locate_other_not_allowed"));
                     return;
                 }
             }
             else
             {
                 UnturnedPlayer unturnedCaller = (UnturnedPlayer)caller;
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("location_on_map", unturnedCaller.Position.xyz_Location()));
+                TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("location_on_map", unturnedCaller.Position.xyz_Location()));
             }
         }
     }
