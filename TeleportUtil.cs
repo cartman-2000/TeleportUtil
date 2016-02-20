@@ -1,27 +1,15 @@
-﻿using Rocket.API;
-using Rocket.API.Collections;
-using Rocket.Core;
+﻿using Rocket.API.Collections;
 using Rocket.Core.Plugins;
-using Rocket.Core.RCON;
-using Rocket.Unturned.Chat;
 
 namespace TeleportUtil
 {
-    public class TeleportUtil : RocketPlugin<TeleportUtilConfig>
+    public class TeleportUtil : RocketPlugin
     {
         public static TeleportUtil Instance;
 
         protected override void Load()
         {
             Instance = this;
-            Instance.Configuration.Save();
-        }
-
-        internal static void RconPrint(IRocketPlayer caller, string msg)
-        {
-            if (caller is ConsolePlayer && R.Settings.Instance.RCON.Enabled && Instance.Configuration.Instance.PrintToRCON)
-                RCONServer.Broadcast(msg);
-            UnturnedChat.Say(caller, msg);
         }
 
         public override TranslationList DefaultTranslations

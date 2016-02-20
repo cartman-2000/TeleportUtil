@@ -47,12 +47,12 @@ namespace TeleportUtil
         {
             if (command.Length == 0)
             {
-                TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("tpall_help"));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tpall_help"));
                 return;
             }
             if (command.Length != 1 && command.Length != 3)
             {
-                TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("invalid_arg"));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                 return;
             }
             // Teleport by x, y, z.
@@ -65,7 +65,7 @@ namespace TeleportUtil
                     Teleport(new Vector3(x.Value, y.Value, z.Value), 0, caller);
                 else
                 {
-                    TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("invalid_arg"));
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                     return;
                 }
             }
@@ -85,7 +85,7 @@ namespace TeleportUtil
                         Teleport(new Vector3(infonode.Position.x, infonode.Position.y + .5f, infonode.Position.z), 0f, caller, ((LocationNode)infonode).Name);
                     else
                     {
-                        TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("can't_find_location"));
+                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("can't_find_location"));
                         return;
                     }
                 }
@@ -98,7 +98,7 @@ namespace TeleportUtil
             List<string> excluded = new List<string>();
             if (numPlayers == 0)
             {
-                TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("no_players_tpall"));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("no_players_tpall"));
                 return;
             }
             if (name == null)
@@ -115,7 +115,7 @@ namespace TeleportUtil
                 UnturnedChat.Say(player.SteamPlayerID.CSteamID, TeleportUtil.Instance.Translate("tp_success", name));
                 player.player.sendTeleport(Location, MeasurementTool.angleToByte(Rotation));
             }
-            TeleportUtil.RconPrint(caller, TeleportUtil.Instance.Translate("tpall_num_teleported", numPlayers, name, string.Join(", ", excluded.ToArray())));
+            UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tpall_num_teleported", numPlayers, name, string.Join(", ", excluded.ToArray())));
         }
     }
 }
