@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SDG.Unturned;
+using System;
 using UnityEngine;
 
 namespace TeleportUtil
@@ -14,6 +15,12 @@ namespace TeleportUtil
         internal static string xyz_Location(this Vector3 Location)
         {
             return "x:" + Math.Round(Location.x, 2).ToString() + ", y:" + Math.Round(Location.y, 2).ToString() + ", z:" + Math.Round(Location.z, 2).ToString();
+        }
+
+        internal static void TeleportCar(this InteractableVehicle vehicle, Vector3 Location)
+        {
+            vehicle.transform.position = Location;
+            VehicleManager.sendVehiclePosition(vehicle, Location);
         }
     }
 }

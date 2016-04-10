@@ -62,19 +62,21 @@ namespace TeleportUtil
                 float? y = command.GetFloatParameter(1);
                 float? z = command.GetFloatParameter(2);
                 UnturnedPlayer unturnedCaller = (UnturnedPlayer)caller;
-
+                Vector3 newLocation;
                 if (x.HasValue && y.HasValue && z.HasValue)
                 {
-                    // Don't allow the player to teleport if they are in a car.
-                    if (unturnedCaller.Stance == EPlayerStance.DRIVING || unturnedCaller.Stance == EPlayerStance.SITTING)
-                    {
-                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail"));
-                        return;
-                    }
-
                     // Compute new location from the relative location parameters entered into the command.
-                    Vector3 newLocation = new Vector3(unturnedCaller.Position.x + x.Value, unturnedCaller.Position.y + y.Value, unturnedCaller.Position.z + z.Value);
-                    unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
+                    if (unturnedCaller.IsInVehicle)
+                    {
+                        InteractableVehicle vehicle = unturnedCaller.CurrentVehicle;
+                        newLocation = new Vector3(vehicle.transform.position.x + x.Value, vehicle.transform.position.y + y.Value, vehicle.transform.position.z + z.Value);
+                        vehicle.TeleportCar(newLocation);
+                    }
+                    else
+                    {
+                        newLocation = new Vector3(unturnedCaller.Position.x + x.Value, unturnedCaller.Position.y + y.Value, unturnedCaller.Position.z + z.Value);
+                        unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
+                    }
                     UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
                 }
                 else

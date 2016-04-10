@@ -56,14 +56,16 @@ namespace TeleportUtil
 
             // Don't allow teleport if the player is in a car.
             UnturnedPlayer unturnedCaller = (UnturnedPlayer)caller;
-            if (unturnedCaller.Stance == EPlayerStance.DRIVING || unturnedCaller.Stance == EPlayerStance.SITTING)
+            InteractableVehicle vehicle = null;
+            Vector3 newLocation;
+            if (unturnedCaller.IsInVehicle)
             {
-                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail"));
-                return;
+                vehicle = unturnedCaller.CurrentVehicle;
+                newLocation = vehicle.transform.position;
             }
-
+            else
+                newLocation = unturnedCaller.Position;
             // Parse through the list of parameters, and compute new location.
-            Vector3 newLocation = unturnedCaller.Position;
             foreach (string part in command)
             {
                 if (part.Length < 2)
@@ -102,7 +104,10 @@ namespace TeleportUtil
                         return;
                 }
             }
-            unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
+            if (unturnedCaller.IsInVehicle)
+                vehicle.TeleportCar(newLocation);
+            else
+                unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
             UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
         }
     }

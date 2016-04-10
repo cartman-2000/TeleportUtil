@@ -26,7 +26,6 @@ namespace TeleportUtil
                     { "locate_other_not_allowed", "You're not allowed to use locate on another player." },
                     { "location_on_map", "Your location on the map is: {0}" },
                     { "location_on_map_other", "Player: \"{0}\" location on the map is: {1}" },
-                    { "tp_fail", "Failed to teleport: Can't teleport while in a car." },
                     { "tp_success", "You have been teleported to: {0}" },
                     { "can't_find_location", "There's no players or locations by that name on the server." },
                     { "no_players_tpall", "There were no players found to teleport." },
