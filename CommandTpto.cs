@@ -105,10 +105,15 @@ namespace TeleportUtil
                 }
             }
             if (unturnedCaller.IsInVehicle)
-                vehicle.TeleportCar(newLocation);
+                if (vehicle.TeleportCar(unturnedCaller, newLocation))
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
+                else
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail_vehicle"));
             else
+            {
                 unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
-            UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
+                UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
+            }
         }
     }
 }

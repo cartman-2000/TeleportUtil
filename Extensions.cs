@@ -1,4 +1,5 @@
-﻿using SDG.Unturned;
+﻿using Rocket.Unturned.Player;
+using SDG.Unturned;
 using System;
 using UnityEngine;
 
@@ -17,10 +18,12 @@ namespace TeleportUtil
             return "x:" + Math.Round(Location.x, 2).ToString() + ", y:" + Math.Round(Location.y, 2).ToString() + ", z:" + Math.Round(Location.z, 2).ToString();
         }
 
-        internal static void TeleportCar(this InteractableVehicle vehicle, Vector3 Location)
+        internal static bool TeleportCar(this InteractableVehicle vehicle, UnturnedPlayer player, Vector3 Location)
         {
+            if (player.CurrentVehicle.passengers[0].player != null)
+                return false;
             vehicle.transform.position = Location;
-            VehicleManager.sendVehiclePosition(vehicle, Location);
+            return true;
         }
     }
 }

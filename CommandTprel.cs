@@ -70,14 +70,17 @@ namespace TeleportUtil
                     {
                         InteractableVehicle vehicle = unturnedCaller.CurrentVehicle;
                         newLocation = new Vector3(vehicle.transform.position.x + x.Value, vehicle.transform.position.y + y.Value, vehicle.transform.position.z + z.Value);
-                        vehicle.TeleportCar(newLocation);
+                        if (vehicle.TeleportCar(unturnedCaller, newLocation))
+                            UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
+                        else
+                            UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail_vehicle"));
                     }
                     else
                     {
                         newLocation = new Vector3(unturnedCaller.Position.x + x.Value, unturnedCaller.Position.y + y.Value, unturnedCaller.Position.z + z.Value);
                         unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
+                        UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
                     }
-                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
                 }
                 else
                 {

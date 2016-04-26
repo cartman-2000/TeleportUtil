@@ -27,6 +27,7 @@ namespace TeleportUtil
                     { "location_on_map", "Your location on the map is: {0}" },
                     { "location_on_map_other", "Player: \"{0}\" location on the map is: {1}" },
                     { "tp_success", "You have been teleported to: {0}" },
+                    { "tp_fail_vehicle", "Failed to teleport vehicle: There must be no driver in the car." },
                     { "can't_find_location", "There's no players or locations by that name on the server." },
                     { "no_players_tpall", "There were no players found to teleport." },
                     { "tpall_num_teleported", "{0} players have been teleported to: {1}, excluded players: {2}"}
