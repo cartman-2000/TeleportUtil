@@ -79,11 +79,11 @@ namespace TeleportUtil
                 else
                 {
                     // Teleport to a map info node.
-                    Node infonode = (from n in LevelNodes.Nodes
-                                 where n.NodeType == ENodeType.LOCATION && ((LocationNode)n).Name.ToLower().Contains(command[0].ToLower())
+                    Node infonode = (from n in LevelNodes.nodes
+                                 where n.type == ENodeType.LOCATION && ((LocationNode)n).name.ToLower().Contains(command[0].ToLower())
                                  select n).FirstOrDefault();
                     if (infonode != null)
-                        Teleport(new Vector3(infonode.Position.x, infonode.Position.y + .5f, infonode.Position.z), 0f, caller, ((LocationNode)infonode).Name);
+                        Teleport(new Vector3(infonode.point.x, infonode.point.y + .5f, infonode.point.z), 0f, caller, ((LocationNode)infonode).name);
                     else
                     {
                         UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("can't_find_location"));
@@ -95,7 +95,7 @@ namespace TeleportUtil
 
         private void Teleport(Vector3 Location, float Rotation, IRocketPlayer caller, string name = null)
         {
-            int numPlayers = Provider.Players.Count;
+            int numPlayers = Provider.clients.Count;
             List<string> excluded = new List<string>();
             if (numPlayers == 0)
             {
@@ -104,16 +104,16 @@ namespace TeleportUtil
             }
             if (name == null)
                 name = Location.xyz_Location();
-            foreach (SteamPlayer player in Provider.Players)
+            foreach (SteamPlayer player in Provider.clients)
             {
                 // Don't teleport the player to teleport if they are in a car.
-                if (player.Player.Stance.Stance == EPlayerStance.DRIVING || player.Player.Stance.Stance == EPlayerStance.SITTING)
+                if (player.player.stance.stance == EPlayerStance.DRIVING || player.player.stance.stance == EPlayerStance.SITTING)
                 {
                     numPlayers--;
-                    excluded.Add(player.SteamPlayerID.CharacterName);
+                    excluded.Add(player.playerID.characterName);
                     continue;
                 }
-                UnturnedChat.Say(player.SteamPlayerID.CSteamID, TeleportUtil.Instance.Translate("tp_success", name));
+                UnturnedChat.Say(player.playerID.steamID, TeleportUtil.Instance.Translate("tp_success", name));
                 player.player.sendTeleport(Location, MeasurementTool.angleToByte(Rotation));
             }
             UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tpall_num_teleported", numPlayers, name, string.Join(", ", excluded.ToArray())));
