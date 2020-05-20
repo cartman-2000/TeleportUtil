@@ -93,7 +93,7 @@ namespace TeleportUtil
             }
         }
 
-        private void Teleport(Vector3 Location, float Rotation, IRocketPlayer caller, string name = null)
+        private void Teleport(Vector3 location, float rotation, IRocketPlayer caller, string name = null)
         {
             int numPlayers = Provider.clients.Count;
             List<string> excluded = new List<string>();
@@ -103,7 +103,7 @@ namespace TeleportUtil
                 return;
             }
             if (name == null)
-                name = Location.xyz_Location();
+                name = location.xyz_Location();
             foreach (SteamPlayer player in Provider.clients)
             {
                 // Don't teleport the player to teleport if they are in a car.
@@ -113,8 +113,18 @@ namespace TeleportUtil
                     excluded.Add(player.playerID.characterName);
                     continue;
                 }
+
+                if (!player.player.teleportToLocation(location, rotation))
+                {
+                    if (caller.IsAdmin)
+                    {
+                        player.player.teleportToLocationUnsafe(location, rotation);
+                        continue;
+                    }
+                    UnturnedChat.Say(player.playerID.steamID, TeleportUtil.Instance.Translate("tp_fail_obstructed"));
+                    return;
+                }
                 UnturnedChat.Say(player.playerID.steamID, TeleportUtil.Instance.Translate("tp_success", name));
-                player.player.sendTeleport(Location, MeasurementTool.angleToByte(Rotation));
             }
             UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tpall_num_teleported", numPlayers, name, string.Join(", ", excluded.ToArray())));
         }

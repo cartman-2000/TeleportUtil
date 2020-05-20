@@ -78,7 +78,16 @@ namespace TeleportUtil
                     else
                     {
                         newLocation = new Vector3(unturnedCaller.Position.x + x.Value, unturnedCaller.Position.y + y.Value, unturnedCaller.Position.z + z.Value);
-                        unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
+                        if (!unturnedCaller.Player.teleportToLocation(newLocation, unturnedCaller.Rotation))
+                        {
+                            if (caller.IsAdmin)
+                            {
+                                unturnedCaller.Player.teleportToLocationUnsafe(newLocation, unturnedCaller.Rotation);
+                                return;
+                            }
+                            UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail_obstructed"));
+                            return;
+                        }
                         UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
                     }
                 }

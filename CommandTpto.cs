@@ -73,8 +73,7 @@ namespace TeleportUtil
                     UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                     return;
                 }
-                float distance;
-                if (!float.TryParse(part.Substring(1, part.Length - 1), out distance))
+                if (!float.TryParse(part.Substring(1, part.Length - 1), out float distance))
                 {
                     UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("invalid_arg"));
                     return;
@@ -111,7 +110,16 @@ namespace TeleportUtil
                     UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail_vehicle"));
             else
             {
-                unturnedCaller.Teleport(newLocation, unturnedCaller.Rotation);
+                if (!unturnedCaller.Player.teleportToLocation(newLocation, unturnedCaller.Rotation))
+                {
+                    if (caller.IsAdmin)
+                    {
+                        unturnedCaller.Player.teleportToLocationUnsafe(newLocation, unturnedCaller.Rotation);
+                        return;
+                    }
+                    UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_fail_obstructed"));
+                    return;
+                }
                 UnturnedChat.Say(caller, TeleportUtil.Instance.Translate("tp_success", newLocation.xyz_Location()));
             }
         }

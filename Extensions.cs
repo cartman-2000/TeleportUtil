@@ -2,6 +2,7 @@
 using SDG.Unturned;
 using System;
 using UnityEngine;
+using Math = System.Math;
 
 namespace TeleportUtil
 {
